@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vintage User Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --ivory: #fff9f5;
+      --blush: #f8e1e4;
+      --rose: #f3c8cb;
+      --dusty-rose: #d4a5a5;
+      --taupe: #d8c3b0;
+      --soft-beige: #e8d9c5;
+      --text-dark: #5a3e36;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: var(--ivory);
+      color: var(--text-dark);
+      line-height: 1.6;
+      background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Background textures */
+    .floral-bg {
+      background-image: url('https://www.transparenttextures.com/patterns/roses.png');
+      background-blend-mode: overlay;
+    }
+
+    .lace-bg {
+      background-image: url('https://www.transparenttextures.com/patterns/vintage-speckles.png');
+    }
+
+    .gingham-bg {
+      background-image: url('https://www.transparenttextures.com/patterns/pink-dust.png');
+    }
+
+    /* Header with torn paper effect */
+    .vintage-header {
+      background-color: var(--blush);
+      padding: 2rem 0;
+      text-align: center;
+      position: relative;
+      margin-bottom: 3rem;
+      width: 100%;
+      background-image: url('https://www.transparenttextures.com/patterns/roses.png');
+    }
+
+    .vintage-header::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 Q25,10 50,0 T100,0" fill="%23fff9f5" /></svg>');
+      background-size: 100% 100%;
+    }
+
+    .main-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.5rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: inline-block;
+    }
+
+    .main-title::before, .main-title::after {
+      content: "❀";
+      position: absolute;
+      color: var(--dusty-rose);
+      font-size: 1.8rem;
+    }
+
+    .main-title::before {
+      left: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .main-title::after {
+      right: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Main container */
+    .vintage-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      width: 100%;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .vintage-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Form panel */
+    .form-panel {
+      background-color: var(--ivory);
+      border: 1px solid var(--taupe);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--rose), var(--dusty-rose), var(--rose));
+    }
+
+    .panel-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--text-dark);
+      margin-bottom: 1.5rem;
+      border-bottom: 1px dashed var(--taupe);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Form elements */
+    .vintage-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      padding-left: 1.5rem;
+    }
+
+    .form-group label::before {
+      content: "✽";
+      position: absolute;
+      left: 0;
+      color: var(--dusty-rose);
+    }
+
+    .vintage-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--taupe);
+      border-radius: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      background-color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .vintage-input:focus {
+      outline: none;
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
+    }
+
+    /* Table panel */
+    .table-panel {
+      background-color: var(--ivory);
+      border: 1px solid var(--taupe);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .table-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--rose), var(--dusty-rose), var(--rose));
+    }
+
+    /* Search */
+    .search-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-container::after {
+      content: "\f002";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dusty-rose);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.8rem 2.5rem 0.8rem 1rem;
+      border: 1px solid var(--taupe);
+      border-radius: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      background-color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
+    }
+
+    /* Table styling */
+    .vintage-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+
+    .vintage-table thead {
+      background: linear-gradient(90deg, var(--rose), var(--dusty-rose));
+      color: white;
+    }
+
+    .vintage-table th, .vintage-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--taupe);
+    }
+
+    .vintage-table tr:not(:first-child):hover {
+      background-color: var(--blush);
+    }
+
+    /* Buttons with bow decoration */
+    .vintage-btn {
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.8rem 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .vintage-btn:hover {
+      background-color: var(--text-dark);
+      transform: translateY(-2px);
+    }
+
+    .vintage-btn::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 20px;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><path d="M15,0 Q20,15 25,0 Q30,15 15,20 Q0,15 5,0 Q10,15 15,0" fill="%23f8e1e4" /></svg>');
+      background-repeat: no-repeat;
+    }
+
+    /* Action buttons */
+    .action-btn {
+      background-color: var(--rose);
+      border: none;
+      border-radius: 4px;
+      color: white;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .action-btn:hover {
+      background-color: var(--dusty-rose);
+    }
+
+    .delete-btn {
+      background-color: var(--text-dark);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-dark);
+    }
+
+    .empty-state i {
+      font-size: 2rem;
+      color: var(--rose);
+      margin-bottom: 1rem;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: var(--ivory);
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      position: relative;
+      border: 1px solid var(--taupe);
+    }
+
+    .modal-overlay.visible .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-content::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--rose), var(--dusty-rose), var(--rose));
+    }
+
+    .modal-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .modal-btn {
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.8rem 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .modal-btn:hover {
+      background-color: var(--text-dark);
+    }
+
+    /* Footer */
+    .vintage-footer {
+      background-color: var(--blush);
+      padding: 2rem 0;
+      text-align: center;
+      width: 100%;
+      margin-top: auto;
+      position: relative;
+      background-image: url('https://www.transparenttextures.com/patterns/roses.png');
+    }
+
+    .vintage-footer::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg"><path d="M0,10 Q25,0 50,10 T100,10" fill="%23f8e1e4" /></svg>');
+      background-size: 100% 100%;
+    }
+
+    .footer-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .main-title {
+        font-size: 2.5rem;
+      }
+      
+      .main-title::before, .main-title::after {
+        font-size: 1.2rem;
+      }
+      
+      .main-title::before {
+        left: -30px;
+      }
+      
+      .main-title::after {
+        right: -30px;
+      }
+      
+      .vintage-container {
+        padding: 0 1rem;
+      }
+      
+      .vintage-table th, .vintage-table td {
+        padding: 0.8rem 0.5rem;
+      }
+      
+      .action-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="vintage-header">
+    <h1 class="main-title">User Management</h1>
+  </header>
+  
+  <!-- Main container -->
+  <div class="vintage-container">
+    <!-- Form panel -->
+    <div class="form-panel lace-bg">
+      <h2 class="panel-title">User Form</h2>
+      <form id="userForm" class="vintage-form">
+        <input type="hidden" id="userId">
+        <div class="form-group">
+          <label for="userName">Name</label>
+          <input type="text" id="userName" class="vintage-input" placeholder="Enter full name" required>
+        </div>
+        <div class="form-group">
+          <label for="userEmail">Email</label>
+          <input type="email" id="userEmail" class="vintage-input" placeholder="Enter email address" required>
+        </div>
+        <button type="submit" class="vintage-btn" id="submitBtn">
+          <i class="fas fa-user-plus"></i> Add User
+        </button>
+      </form>
+    </div>
+    
+    <!-- Table panel -->
+    <div class="table-panel gingham-bg">
+      <h2 class="panel-title">User List</h2>
+      <div class="search-container">
+        <input type="search" id="searchInput" class="search-input" placeholder="Search users...">
+      </div>
+      
+      <table class="vintage-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <!-- Empty state -->
+          <tr id="emptyState">
+            <td colspan="3" class="empty-state">
+              <i class="fas fa-heart"></i>
+              <p>No users found. Add your first user!</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="vintage-footer">
+    <p class="footer-text"></p>
+  </footer>
+
+  <!-- Modal -->
+  <div id="customAlertModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p id="modalMessage"></p>
+      <button class="modal-btn" id="modalCloseButton">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL = 'http://localhost:3000'; // Your backend URL
+
+    const userForm = document.getElementById('userForm');
+    const usersTableBody = document.getElementById('usersTableBody');
+    const searchInput = document.getElementById('searchInput');
+    const emptyState = document.getElementById('emptyState');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function showCustomAlert(title, message) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMessage').textContent = message;
+      document.getElementById('customAlertModal').classList.add('visible');
+    }
+
+    document.getElementById('modalCloseButton').addEventListener('click', () => {
+      document.getElementById('customAlertModal').classList.remove('visible');
+    });
+
+    async function fetchUsers() {
+      try {
+        const res = await fetch(`${BASE_URL}/users`);
+        const users = await res.json();
+        displayUsers(users);
+      } catch (err) {
+        console.error('Error fetching users:', err);
+        showCustomAlert('Error', 'Failed to fetch users');
+      }
+    }
+
+    function displayUsers(users) {
+      const searchValue = searchInput.value.toLowerCase();
+      usersTableBody.innerHTML = '';
+      
+      const filteredUsers = users.filter(user =>
+        (user.name || '').toLowerCase().includes(searchValue) ||
+        (user.email || '').toLowerCase().includes(searchValue)
+      );
+      
+      if (filteredUsers.length === 0) {
+        emptyState.style.display = '';
+      } else {
+        emptyState.style.display = 'none';
+        filteredUsers.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>
+              <button class="action-btn" onclick='editUser(${JSON.stringify(user)})'>
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="action-btn delete-btn" onclick='deleteUser("${user.id}")'>
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </td>
+          `;
+          usersTableBody.appendChild(row);
+        });
+      }
+    }
+
+    async function deleteUser(id) {
+      const originalHandler = document.getElementById('modalCloseButton').onclick;
+      
+      showCustomAlert('Confirm', 'Are you sure you want to delete this user?');
+      
+      document.getElementById('modalCloseButton').onclick = async function() {
+        try {
+          await fetch(`${BASE_URL}/users/${id}`, { method: 'DELETE' });
+          showCustomAlert('Deleted!', 'User has been deleted successfully.');
+          fetchUsers();
+          document.getElementById('modalCloseButton').onclick = originalHandler;
+        } catch (err) {
+          console.error('Delete error:', err);
+          showCustomAlert('Error', 'Failed to delete user');
+          document.getElementById('modalCloseButton').onclick = originalHandler;
+        }
+      };
+    }
+
+    function editUser(user) {
+      document.getElementById('userName').value = user.name;
+      document.getElementById('userEmail').value = user.email;
+      document.getElementById('userId').value = user.id;
+      submitBtn.innerHTML = `<i class="fas fa-save"></i> Update User`;
+      
+      // Scroll to form
+      document.querySelector('.form-panel').scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }
+
+    userForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('userId').value;
+      const name = document.getElementById('userName').value;
+      const email = document.getElementById('userEmail').value;
+
+      // Add loading state
+      submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
+      submitBtn.disabled = true;
+
+      try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `${BASE_URL}/users/${id}` : `${BASE_URL}/users`;
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email })
+        });
+
+        if (res.ok) {
+          showCustomAlert('Success', id ? 'User updated successfully!' : 'User created successfully!');
+          userForm.reset();
+          submitBtn.innerHTML = `<i class="fas fa-user-plus"></i> Add User`;
+          document.getElementById('userId').value = '';
+          fetchUsers();
+        } else {
+          const error = await res.json();
+          showCustomAlert('Error', error.error || 'Something went wrong');
+        }
+      } catch (err) {
+        console.error('Submit error:', err);
+        showCustomAlert('Network Error', 'Make sure the server is running.');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    searchInput.addEventListener('input', fetchUsers);
+
+    // Load users when page loads
+    window.addEventListener('DOMContentLoaded', fetchUsers);
+  </script>
+</body>
+</html>
